@@ -8,6 +8,7 @@ import { FixieLoader } from "@/components/FixieLoader";
 import { useCartContext } from "@/components/cart-context";
 import { supabase } from "@/lib/supabaseClient";
 import { Product } from "@/types/product";
+import { sampleProducts } from "@/data/products";
 
 const Index = () => {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -29,9 +30,9 @@ const Index = () => {
 
       if (error) {
         console.error("Error fetching products:", error.message);
-        setProducts([]);
+        setProducts(sampleProducts);
       } else {
-        setProducts(data || []);
+        setProducts(data || sampleProducts);
       }
       setLoading(false);
     };
