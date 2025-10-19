@@ -5,6 +5,7 @@ export interface Product {
   price: number;
   stock: number;        // kolom stok dari Supabase
   image_url?: string;   // kolom gambar
+  image?: string;       // dukung data dummy yang menggunakan field image
   category?: string;
   brand?: string;
   featured?: boolean;

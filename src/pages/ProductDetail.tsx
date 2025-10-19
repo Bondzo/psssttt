@@ -6,13 +6,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, ShoppingCart, Heart, Share2, Minus, Plus } from 'lucide-react';
 import { sampleProducts } from '@/data/products';
-import { useCart } from '@/hooks/useCart';
+import { useCartContext } from '@/components/cart-context';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { useToast } from '@/hooks/use-toast';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { cart, addToCart } = useCart();
+  const { cart, addToCart } = useCartContext();
+  const { toast } = useToast();
   const [quantity, setQuantity] = useState(1);
   
   const product = sampleProducts.find(p => p.id === id);
@@ -40,8 +42,21 @@ const ProductDetail = () => {
     }).format(price);
   };
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
+  const handleAddToCart = async () => {
+    try {
+      await addToCart(product, quantity);
+      toast({
+        title: 'Berhasil',
+        description: `${product.name} ditambahkan ke keranjang`,
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Gagal menambahkan ke keranjang';
+      toast({
+        title: 'Gagal',
+        description: message,
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
