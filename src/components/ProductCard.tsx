@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Eye, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabaseClient"; // pastikan path benar
 import { Product } from "@/types/product"; // pastikan Product sudah sesuai schema Supabase
+import { useCartContext } from "@/components/cart-context";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +13,7 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   const { toast } = useToast();
+  const { addToCart } = useCartContext();
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("id-ID", {
@@ -23,59 +24,17 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleAddToCart = async () => {
     try {
-      // Ambil user aktif
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      if (userError || !user) {
-        toast({
-          title: "Gagal",
-          description: "Anda harus login terlebih dahulu",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Cek apakah produk sudah ada di keranjang
-      const { data: existing, error: selectError } = await supabase
-        .from("cart_items")
-        .select("id, quantity")
-        .eq("user_id", user.id)
-        .eq("product_id", product.id)
-        .maybeSingle(); // lebih aman daripada .single()
-
-      if (selectError) throw selectError;
-
-      if (existing) {
-        // Update quantity
-        const { error: updateError } = await supabase
-          .from("cart_items")
-          .update({ quantity: existing.quantity + 1 })
-          .eq("id", existing.id);
-
-        if (updateError) throw updateError;
-      } else {
-        // Tambah item baru
-        const { error: insertError } = await supabase.from("cart_items").insert([
-          {
-            user_id: user.id,
-            product_id: product.id,
-            quantity: 1,
-          },
-        ]);
-        if (insertError) throw insertError;
-      }
-
+      await addToCart(product, 1);
       toast({
         title: "Berhasil",
         description: `${product.name} ditambahkan ke keranjang`,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Gagal menambahkan ke keranjang";
       toast({
         title: "Error",
-        description: err.message || "Gagal menambahkan ke keranjang",
+        description: message,
         variant: "destructive",
       });
     }

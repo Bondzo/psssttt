@@ -8,7 +8,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ArrowLeft, CreditCard, Truck, MapPin } from 'lucide-react';
-import { useCart } from '@/hooks/useCart';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { useToast } from '@/hooks/use-toast';
@@ -28,13 +27,22 @@ const Checkout = () => {
     }).format(price);
   };
 
-  const handleSubmitOrder = () => {
-    toast({
-      title: "Pesanan Berhasil!",
-      description: "Terima kasih atas pesanan Anda. Kami akan segera memproses pesanan Anda.",
-    });
-    clearCart();
-    // Redirect to success page or order confirmation
+  const handleSubmitOrder = async () => {
+    try {
+      toast({
+        title: "Pesanan Berhasil!",
+        description: "Terima kasih atas pesanan Anda. Kami akan segera memproses pesanan Anda.",
+      });
+      await clearCart();
+      // Redirect to success page or order confirmation
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Gagal membersihkan keranjang';
+      toast({
+        title: 'Gagal',
+        description: message,
+        variant: 'destructive',
+      });
+    }
   };
 
   const shippingCost = shippingMethod === 'express' ? 25000 : 0;
@@ -181,7 +189,7 @@ const Checkout = () => {
                   {cart.items.map((item) => (
                     <div key={item.product.id} className="flex gap-3">
                       <img
-                        src={item.product.image}
+                        src={item.product.image || item.product.image_url || '/placeholder.png'}
                         alt={item.product.name}
                         className="w-12 h-12 object-cover rounded"
                       />
