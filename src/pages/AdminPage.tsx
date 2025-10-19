@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FixieLoader } from "@/components/FixieLoader";
 import { useToast } from "@/hooks/use-toast";
 
 interface Product {
@@ -20,6 +21,7 @@ const AdminPage = () => {
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -62,6 +64,13 @@ const AdminPage = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      const timeout = setTimeout(() => setShowLoader(false), 320);
+      return () => clearTimeout(timeout);
+    }
+  }, [loading]);
 
   // Tambah / Update produk
   const handleSubmit = async (e: React.FormEvent) => {
@@ -151,6 +160,14 @@ const AdminPage = () => {
     setImage("");
     setCategory("");
   };
+
+  if (showLoader) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <FixieLoader message="Mengayuh menuju dashboard admin..." />
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 space-y-8">
@@ -249,7 +266,10 @@ const AdminPage = () => {
         </CardHeader>
         <CardContent>
           {loading ? (
-            <p>Memuat produk...</p>
+            <FixieLoader
+              message="Mengambil data inventaris fixie..."
+              className="py-10"
+            />
           ) : products.length === 0 ? (
             <p>Tidak ada produk.</p>
           ) : (

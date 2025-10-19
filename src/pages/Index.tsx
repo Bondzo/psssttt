@@ -4,6 +4,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { CategoryNav } from "@/components/CategoryNav";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
+import { FixieLoader } from "@/components/FixieLoader";
 import { useCart } from "@/hooks/useCart";
 import { supabase } from "@/lib/supabaseClient";
 import { Product } from "@/types/product";
@@ -15,6 +16,7 @@ const Index = () => {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
 
   // Fetch produk dari Supabase
   useEffect(() => {
@@ -37,6 +39,13 @@ const Index = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    if (!loading) {
+      const timeout = setTimeout(() => setShowLoader(false), 320);
+      return () => clearTimeout(timeout);
+    }
+  }, [loading]);
+
   // Filter produk berdasarkan kategori & pencarian
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
@@ -50,6 +59,14 @@ const Index = () => {
       return matchesCategory && matchesSearch;
     });
   }, [products, activeCategory, searchQuery]);
+
+  if (showLoader) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <FixieLoader message="Mengayuh menuju beranda FixGear..." />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,9 +90,10 @@ const Index = () => {
         )}
 
         {loading ? (
-          <p className="text-center py-10 text-muted-foreground">
-            Memuat produk...
-          </p>
+          <FixieLoader
+            message="Memuat katalog fixie terbaik untukmu..."
+            className="py-16"
+          />
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
