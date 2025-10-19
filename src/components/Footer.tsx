@@ -9,7 +9,7 @@ export const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-primary-foreground text-sm font-bold"><img src="logo_fixie.png" alt="" /></span>
+                <span className="text-primary-foreground text-sm font-bold"><img src="bulat.png" alt="" /></span>
               </div>
               <span className="text-xl font-bold text-foreground">FixStore</span>
             </div>

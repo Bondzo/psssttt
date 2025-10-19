@@ -41,16 +41,16 @@ export const HeroSection = () => {
           <div className="flex-1 flex items-center justify-center">
             <div className="relative">
               {/* Decorative Shape */}
-              <div className="w-80 h-48 bg-gradient-to-r from-muted to-accent/30 rounded-full relative">
-                {/* Bike SVG Icon */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-80 h-auto rounded-lg"><img src="Enjoy.png" alt="" /></div>
+             <div className="w-[500px] h-[300px] bg-gradient-to-r from-muted to-accent/30 rounded-full relative">
+              {/* Bike SVG Icon */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-[500px] h-auto rounded-lg">
+                  <img src="bg2_n.png" alt="" className="w-full h-auto object-contain" />
                 </div>
               </div>
+            </div>
               
               {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-12 h-12 bg-primary/20 rounded-full animate-pulse" />
-              <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-accent/40 rounded-full animate-pulse delay-1000" />
             </div>
           </div>
         </div>

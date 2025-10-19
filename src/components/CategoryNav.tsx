@@ -20,7 +20,7 @@ const categories = [
 
 export const CategoryNav = ({ activeCategory, onCategoryChange }: CategoryNavProps) => {
   return (
-    <div className="sticky top-[64px] z-40 border-b border-border/40 bg-background/80 py-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border/50">
+    <div className="sticky top-[64px] z-40 border-b border-border/40 bg-background py-4 dark:border-border/50">
       <div className="container mx-auto px-4">
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {categories.map((category) => {
