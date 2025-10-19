@@ -23,18 +23,28 @@ const Index = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching products:", error.message);
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Error fetching products:", error.message);
+          setProducts(sampleProducts);
+          return;
+        }
+
+        setProducts(data?.length ? data : sampleProducts);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Unknown error while fetching products";
+        console.error("Error fetching products:", message);
         setProducts(sampleProducts);
-      } else {
-        setProducts(data || sampleProducts);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchProducts();
