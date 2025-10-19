@@ -5,14 +5,14 @@ import { CategoryNav } from "@/components/CategoryNav";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
 import { FixieLoader } from "@/components/FixieLoader";
-import { useCart } from "@/hooks/useCart";
+import { useCartContext } from "@/components/cart-context";
 import { supabase } from "@/lib/supabaseClient";
 import { Product } from "@/types/product";
 
 const Index = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const { cart } = useCart();
+  const { cart } = useCartContext();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,18 +22,24 @@ const Index = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching products:", error.message);
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        setProducts(data ?? []);
+      } catch (error) {
+        console.error("Error fetching products:", error);
         setProducts([]);
-      } else {
-        setProducts(data || []);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchProducts();
