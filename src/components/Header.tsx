@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link, useLocation } from "react-router-dom";
 import { supabase } from "@/lib/supabaseClient";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -91,6 +92,8 @@ export const Header = ({ cartItemCount = 0, onSearchChange }: HeaderProps) => {
                 )}
               </Button>
             </Link>
+
+            <ThemeToggle />
 
             {/* Auth buttons / User info */}
             {!user && location.pathname !== "/login" && location.pathname !== "/register" ? (
