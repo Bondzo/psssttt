@@ -9,10 +9,7 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* FixGear Brand Colors - sesuai dengan desain */
-
-    --background: 36 33% 96%;
-    --foreground: 0 0% 15%;
-
+    
     --card: 0 0% 100%;
     --card-foreground: 0 0% 15%;
 
@@ -108,7 +105,7 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-neutral-100;
   }
 }
 
