@@ -5,7 +5,7 @@ import { CategoryNav } from "@/components/CategoryNav";
 import { ProductCard } from "@/components/ProductCard";
 import { Footer } from "@/components/Footer";
 import { FixieLoader } from "@/components/FixieLoader";
-import { useCartContext } from "@/components/cart-context";
+import { useCart } from "@/hooks/useCart";
 import { supabase } from "@/lib/supabaseClient";
 import { Product } from "@/types/product";
 import { sampleProducts } from "@/data/products";
@@ -13,7 +13,7 @@ import { sampleProducts } from "@/data/products";
 const Index = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const { cart } = useCartContext();
+  const { cart } = useCart();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
