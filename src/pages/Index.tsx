@@ -23,7 +23,6 @@ const Index = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
-
       try {
         const { data, error } = await supabase
           .from("products")
@@ -33,10 +32,9 @@ const Index = () => {
         if (error) {
           console.error("Error fetching products:", error.message);
           setProducts(sampleProducts);
-          return;
+        } else {
+          setProducts(data?.length ? data : sampleProducts);
         }
-
-        setProducts(data?.length ? data : sampleProducts);
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Unknown error while fetching products";
@@ -50,6 +48,7 @@ const Index = () => {
     fetchProducts();
   }, []);
 
+  // Sembunyikan loader setelah data dimuat
   useEffect(() => {
     if (!loading) {
       const timeout = setTimeout(() => setShowLoader(false), 320);
@@ -71,6 +70,7 @@ const Index = () => {
     });
   }, [products, activeCategory, searchQuery]);
 
+  // Loader utama (saat halaman baru dibuka)
   if (showLoader) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -79,6 +79,7 @@ const Index = () => {
     );
   }
 
+  // Tampilan utama
   return (
     <div className="min-h-screen bg-background">
       <Header cartItemCount={cart.itemCount} onSearchChange={setSearchQuery} />
