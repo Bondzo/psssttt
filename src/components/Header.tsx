@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Search, Home, Bell, ShoppingCart, Moon, Sun } from "lucide-react";
+import { Search, Home, Bell, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link, useLocation } from "react-router-dom";
 import { supabase } from "@/lib/supabaseClient";
-import { useTheme } from "@/components/theme-provider";
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -15,7 +14,6 @@ interface HeaderProps {
 export const Header = ({ cartItemCount = 0, onSearchChange }: HeaderProps) => {
   const location = useLocation();
   const [user, setUser] = useState<any>(null);
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     // cek user saat load pertama
@@ -70,19 +68,6 @@ export const Header = ({ cartItemCount = 0, onSearchChange }: HeaderProps) => {
 
           {/* Navigation Icons */}
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              aria-label="Toggle tema"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
-            </Button>
-
             <Link to="/">
               <Button variant="ghost" size="icon">
                 <Home className="w-5 h-5" />
