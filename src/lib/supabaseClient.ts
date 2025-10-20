@@ -10,35 +10,15 @@ const createNotConfiguredClient = (): SupabaseClient => {
   } as const;
 
   const createQueryBuilder = () => {
-    let result: { data: unknown; error: typeof error } = { data: [], error };
-
     const builder: any = {
-      select: () => builder,
+      select: async () => ({ data: [], error }),
       order: () => builder,
       eq: () => builder,
-      insert: () => {
-        result = { data: null, error };
-        return builder;
-      },
-      update: () => {
-        result = { data: null, error };
-        return builder;
-      },
-      delete: () => {
-        result = { data: null, error };
-        return builder;
-      },
       single: async () => ({ data: null, error }),
       maybeSingle: async () => ({ data: null, error }),
-      then(onFulfilled: (value: { data: unknown; error: typeof error }) => unknown) {
-        return Promise.resolve(result).then(onFulfilled);
-      },
-      catch(onRejected?: (reason: typeof error) => unknown) {
-        return Promise.resolve(result).catch(onRejected);
-      },
-      finally(onFinally?: () => void) {
-        return Promise.resolve().finally(onFinally);
-      },
+      insert: async () => ({ data: null, error }),
+      update: async () => ({ data: null, error }),
+      delete: async () => ({ data: null, error }),
     };
 
     return builder;
